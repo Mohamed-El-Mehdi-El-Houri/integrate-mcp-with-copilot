@@ -84,8 +84,67 @@ def root():
 
 
 @app.get("/activities")
-def get_activities():
-    return activities
+def get_activities(search: str = "", category: str = "", sort_by: str = "name"):
+    """
+    Get activities with optional search, filter by category, and sorting.
+    
+    Query parameters:
+    - search: Search term to filter activities by name or description
+    - category: Filter by category (e.g., 'Sports', 'Academic', 'Arts')
+    - sort_by: Sort field ('name', 'schedule', 'availability', 'popularity')
+    """
+    
+    # Define categories for activities
+    categories = {
+        "Chess Club": "Academic",
+        "Programming Class": "Academic",
+        "Math Club": "Academic",
+        "Debate Team": "Academic",
+        "Gym Class": "Sports",
+        "Soccer Team": "Sports",
+        "Basketball Team": "Sports",
+        "Art Club": "Arts",
+        "Drama Club": "Arts",
+    }
+    
+    filtered_activities = {}
+    
+    for activity_name, details in activities.items():
+        # Apply search filter
+        if search:
+            search_lower = search.lower()
+            if not (search_lower in activity_name.lower() or 
+                    search_lower in details["description"].lower()):
+                continue
+        
+        # Apply category filter
+        if category:
+            if categories.get(activity_name, "").lower() != category.lower():
+                continue
+        
+        filtered_activities[activity_name] = details
+    
+    # Apply sorting
+    sorted_items = filtered_activities.items()
+    
+    if sort_by == "name":
+        sorted_items = sorted(sorted_items, key=lambda x: x[0])
+    elif sort_by == "schedule":
+        sorted_items = sorted(sorted_items, key=lambda x: x[1].get("schedule", ""))
+    elif sort_by == "availability":
+        sorted_items = sorted(
+            sorted_items, 
+            key=lambda x: x[1]["max_participants"] - len(x[1]["participants"]),
+            reverse=True
+        )
+    elif sort_by == "popularity":
+        sorted_items = sorted(
+            sorted_items,
+            key=lambda x: len(x[1]["participants"]),
+            reverse=True
+        )
+    
+    return dict(sorted_items)
 
 
 @app.post("/activities/{activity_name}/signup")

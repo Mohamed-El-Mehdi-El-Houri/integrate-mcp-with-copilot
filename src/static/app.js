@@ -3,15 +3,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  
+  // Toolbar elements
+  const searchInput = document.getElementById("search-input");
+  const categoryFilter = document.getElementById("category-filter");
+  const sortSelect = document.getElementById("sort-select");
+  const resetBtn = document.getElementById("reset-btn");
 
-  // Function to fetch activities from API
+  // Function to fetch activities from API with filters
   async function fetchActivities() {
     try {
-      const response = await fetch("/activities");
+      // Build query parameters
+      const params = new URLSearchParams();
+      const searchTerm = searchInput ? searchInput.value : "";
+      const category = categoryFilter ? categoryFilter.value : "";
+      const sortBy = sortSelect ? sortSelect.value : "name";
+      
+      if (searchTerm) params.append("search", searchTerm);
+      if (category) params.append("category", category);
+      if (sortBy) params.append("sort_by", sortBy);
+      
+      const queryString = params.toString();
+      const url = queryString ? `/activities?${queryString}` : "/activities";
+      
+      const response = await fetch(url);
       const activities = await response.json();
 
       // Clear loading message
       activitiesList.innerHTML = "";
+
+      // Check if no activities found
+      if (Object.keys(activities).length === 0) {
+        activitiesList.innerHTML = "<p>No activities found matching your criteria.</p>";
+        return;
+      }
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -49,11 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         activitiesList.appendChild(activityCard);
 
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
+        // Add option to select dropdown (only if in initial load without filters)
+        if (!searchTerm && !category) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          activitySelect.appendChild(option);
+        }
       });
 
       // Add event listeners to delete buttons
@@ -154,6 +181,19 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error signing up:", error);
     }
   });
+
+  // Event listeners for toolbar controls
+  if (searchInput) searchInput.addEventListener("input", fetchActivities);
+  if (categoryFilter) categoryFilter.addEventListener("change", fetchActivities);
+  if (sortSelect) sortSelect.addEventListener("change", fetchActivities);
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (searchInput) searchInput.value = "";
+      if (categoryFilter) categoryFilter.value = "";
+      if (sortSelect) sortSelect.value = "name";
+      fetchActivities();
+    });
+  }
 
   // Initialize app
   fetchActivities();
