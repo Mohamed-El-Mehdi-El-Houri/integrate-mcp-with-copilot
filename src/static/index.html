@@ -8,13 +8,51 @@
   </head>
   <body>
     <header>
-      <h1>Mergington High School</h1>
+      <h1>🐙 Mergington High School 🐙</h1>
       <h2>Extracurricular Activities</h2>
+      <div style="margin-top: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <img src="https://github.githubassets.com/images/icons/emoji/octocat.gif" alt="Octocat" style="width: 60px; height: 60px;">
+        <img src="https://github.githubassets.com/images/icons/emoji/unicode/1f419.png" alt="Octopus" style="width: 60px; height: 60px;">
+        <img src="https://github.githubassets.com/images/icons/emoji/unicode/1f47d.png" alt="Alien" style="width: 60px; height: 60px;">
+      </div>
     </header>
 
     <main>
       <section id="activities-container">
         <h3>Available Activities</h3>
+        
+        <!-- Search, Filter, and Sort Toolbar -->
+        <div id="toolbar" class="toolbar">
+          <div class="toolbar-group">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Search activities..." 
+              class="toolbar-input"
+            />
+          </div>
+          
+          <div class="toolbar-group">
+            <select id="category-filter" class="toolbar-select">
+              <option value="">All Categories</option>
+              <option value="Academic">Academic</option>
+              <option value="Sports">Sports</option>
+              <option value="Arts">Arts</option>
+            </select>
+          </div>
+          
+          <div class="toolbar-group">
+            <select id="sort-select" class="toolbar-select">
+              <option value="name">Sort by Name</option>
+              <option value="schedule">Sort by Schedule</option>
+              <option value="availability">Sort by Availability</option>
+              <option value="popularity">Sort by Popularity</option>
+            </select>
+          </div>
+          
+          <button id="reset-btn" class="toolbar-button">Reset Filters</button>
+        </div>
+        
         <div id="activities-list">
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
