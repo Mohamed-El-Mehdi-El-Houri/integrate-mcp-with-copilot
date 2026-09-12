@@ -57,6 +57,77 @@ section h3 {
   color: #1a237e;
 }
 
+/* Toolbar styles */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  align-items: center;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.toolbar-input,
+.toolbar-select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.toolbar-input:focus,
+.toolbar-select:focus {
+  outline: none;
+  border-color: #1a237e;
+  box-shadow: 0 0 5px rgba(26, 35, 126, 0.3);
+}
+
+.toolbar-button {
+  padding: 10px 15px;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.toolbar-button:hover {
+  background-color: #5a52d5;
+}
+
+/* Responsive toolbar */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+  }
+
+  .toolbar-group {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .toolbar-input,
+  .toolbar-select,
+  .toolbar-button {
+    width: 100%;
+  }
+}
+
 .activity-card {
   margin-bottom: 15px;
   padding: 15px;
